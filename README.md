@@ -2,8 +2,15 @@
 
 # Bitcointicker for the MAX7219 Dot Matrix Display
 
-Import the .ino to Arduino and change your Wifi and optionally also the PIN-out, if you chose to set them different than given in the sketch.
-While uploading to the device press the left button for (only) 2seconds.
+Import the .ino to Arduino. Set your board to esp32 dev module and install the libraries given in the include statements. 
+Change your Wifi and optionally also the PIN-out, if you chose to set them different than given in the sketch which next tot he GND/VCC is
+
+#define CLK_PIN   18 // VSPI_SCK
+#define DATA_PIN  23 // VSPI_MOSI
+#define CS_PIN    5  // VSPI_SS
+
+Set your port to the usb-device you are adressing, press the left button on the esp32 for (only) 2seconds while also pressing upload in Arduino.
+
 
 Have fun.
 
