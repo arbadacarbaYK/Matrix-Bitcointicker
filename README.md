@@ -6,8 +6,11 @@ Import the .ino to Arduino. Set your board to esp32 dev module and install the l
 Change your Wifi and optionally also the PIN-out, if you chose to set them different than given in the sketch which next to the GND/VCC is
 
 #define CLK_PIN   18 // VSPI_SCK
+
 #define DATA_PIN  23 // VSPI_MOSI
+
 #define CS_PIN    5  // VSPI_SS
+
 
 Set your port to the usb-device you are adressing, press the left button on the esp32 for (only) 2seconds while also pressing upload in Arduino.
 
