@@ -3,7 +3,7 @@
 # Bitcointicker for the MAX7219 Dot Matrix Display
 
 Import the .ino to Arduino. Set your board to esp32 dev module and install the libraries given in the include statements. 
-Change your Wifi and optionally also the PIN-out, if you chose to set them different than given in the sketch which next tot he GND/VCC is
+Change your Wifi and optionally also the PIN-out, if you chose to set them different than given in the sketch which next to the GND/VCC is
 
 #define CLK_PIN   18 // VSPI_SCK
 #define DATA_PIN  23 // VSPI_MOSI
