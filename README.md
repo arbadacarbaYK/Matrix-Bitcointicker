@@ -1,4 +1,4 @@
-![image](https://github.com/arbadacarbaYK/Matrix-Bitcointicker/assets/63317640/70560a1b-4d50-4117-a905-a58b132a459f)
+![image](https://github.com/user-attachments/assets/025b64b4-e298-4005-a32b-a58740a3793f)
 
 # Bitcointicker for the MAX7219 Dot Matrix Display
 
@@ -22,3 +22,6 @@ sudo chmod 777 /dev/ttyUSB*
 Have fun.
 
 ![photo_2024-07-06_13-11-57](https://github.com/arbadacarbaYK/Matrix-Bitcointicker/assets/63317640/f20c29de-2e8b-49c7-b48a-980124b0bacf)
+
+
+![photo_2024-07-30_23-48-59](https://github.com/user-attachments/assets/90bf05a9-9241-470c-b6d1-f0ae9eb6e36a)
