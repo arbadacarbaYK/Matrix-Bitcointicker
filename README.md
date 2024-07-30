@@ -1,4 +1,5 @@
-![image](https://github.com/user-attachments/assets/025b64b4-e298-4005-a32b-a58740a3793f)
+![image](https://github.com/user-attachments/assets/4db3c705-76f4-4339-b490-c71cc401cd9e)
+
 
 # Bitcointicker for the MAX7219 Dot Matrix Display
 
