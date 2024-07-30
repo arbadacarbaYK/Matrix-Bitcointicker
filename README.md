@@ -14,6 +14,10 @@ Change your Wifi and optionally also the PIN-out, if you chose to set them diffe
 
 Set your port to the usb-device you are adressing, press the left button on the esp32 for (only) 2seconds while also pressing upload in Arduino.
 
+If your computer has the (usb driver)[https://www.silabs.com/developers/usb-to-uart-bridge-vcp-drivers?tab=downloads], but your Arduino is unable to access your computer's serial port, you'll get an error like "Failed to open serial port" or something like "dev/tty01 not found". On Linux and MacOS computers, you can fix this by running a command that (temporarily) gives all users access to it with 
+```
+sudo chmod 777 /dev/ttyUSB*
+```
 
 Have fun.
 
