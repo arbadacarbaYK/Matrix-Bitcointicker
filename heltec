@@ -1,0 +1,126 @@
+ Use These SPI Pins for Matrix
+Signal	Connect to Heltec V3 GPIO
+DIN	    GPIO13
+CS	    GPIO15
+CLK	    GPIO14
+VCC	    3.3V or 5V *
+GND	    GND
+
+* Most MAX7219 modules run better at 5V VCC, even if logic is 3.3V.
+   
+
+
+#include <WiFi.h>
+#include <HTTPClient.h>
+#include <ArduinoJson.h>
+#include <MD_MAX72xx.h>
+#include <SPI.h>
+
+// Matrix config
+#define HARDWARE_TYPE MD_MAX72XX::FC16_HW
+#define MAX_DEVICES 4
+
+// SPI pins for Heltec V3
+#define DIN_PIN 19  // MOSI
+#define CS_PIN  7   // CS
+#define CLK_PIN 6   // SCK
+
+MD_MAX72XX mx = MD_MAX72XX(HARDWARE_TYPE, DIN_PIN, CLK_PIN, CS_PIN, MAX_DEVICES);
+
+// WiFi credentials
+const char* ssid = "";
+const char* password = "";
+
+// Alternative Bitcoin API (no SSL cert needed)
+const char* apiEndpoint = "http://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd";
+
+// Scroll timing
+const uint16_t scrollDelay = 80;
+
+void setup() {
+  Serial.begin(115200);
+  
+  // Initialize matrix
+  SPI.begin(CLK_PIN, -1, DIN_PIN, CS_PIN);
+  SPI.setFrequency(1000000);
+  mx.begin();
+  mx.control(MD_MAX72XX::INTENSITY, 2);
+  mx.clear();
+
+  // Connect to WiFi
+  WiFi.begin(ssid, password);
+  Serial.print("Connecting to WiFi");
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+  }
+  Serial.println("\nConnected!");
+  Serial.print("IP: "); 
+  Serial.println(WiFi.localIP());
+
+  scrollMessage("BTC PRICE");
+  delay(2000);
+}
+
+void loop() {
+  if (WiFi.status() == WL_CONNECTED) {
+    getBitcoinPrice();
+  } else {
+    Serial.println("WiFi disconnected");
+    scrollMessage("NO WIFI");
+    WiFi.reconnect();
+  }
+  delay(30000); // Update every 30 seconds
+}
+
+void getBitcoinPrice() {
+  HTTPClient http;
+  
+  Serial.println("Fetching price...");
+  http.begin(apiEndpoint); // No SSL needed with this API
+  
+  int httpCode = http.GET();
+  
+  if (httpCode > 0) {
+    if (httpCode == HTTP_CODE_OK) {
+      String payload = http.getString();
+      Serial.println(payload);
+      
+      DynamicJsonDocument doc(1024);
+      deserializeJson(doc, payload);
+      
+      float price = doc["bitcoin"]["usd"];
+      String displayText = "BTC $" + String(price, 0) + " "; // Round to whole number
+      
+      Serial.print("Current price: ");
+      Serial.println(displayText);
+      scrollMessage(displayText.c_str());
+    }
+  } else {
+    Serial.print("Error: ");
+    Serial.println(http.errorToString(httpCode));
+    scrollMessage("API ERROR");
+  }
+  
+  http.end();
+}
+
+void scrollMessage(const char* msg) {
+  uint8_t charWidth;
+  uint8_t cBuf[8];
+
+  mx.clear();
+
+  for (uint16_t i = 0; i < strlen(msg); i++) {
+    charWidth = mx.getChar(msg[i], sizeof(cBuf)/sizeof(cBuf[0]), cBuf);
+    for (uint8_t col = 0; col < charWidth + 1; col++) {
+      mx.transform(MD_MAX72XX::TSL);
+      if (col < charWidth) {
+        mx.setColumn(0, cBuf[col]);
+      } else {
+        mx.setColumn(0, 0);
+      }
+      delay(scrollDelay);
+    }
+  }
+}
